@@ -6,8 +6,8 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :linovc_core, LinovcCore.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "root",
+  password: "toor",
   hostname: "localhost",
   database: "linovc_core_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
