@@ -2,10 +2,10 @@ import Config
 
 # Configure your database
 config :linovc_core, LinovcCore.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "root",
+  password: "toor",
   hostname: "localhost",
-  database: "linovc_core_dev",
+  database: "linovc_core_db",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
