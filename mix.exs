@@ -10,7 +10,11 @@ defmodule LinovcCore.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      test_coverage: [
+        ignore_modules: [LinovcCoreWeb.Gettext],
+        summary: [threshold: 85]
+      ]
     ]
   end
 
