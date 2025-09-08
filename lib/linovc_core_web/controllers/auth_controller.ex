@@ -50,6 +50,30 @@ defmodule LinovcCoreWeb.AuthController do
 
   def login(_conn, _params), do: {:error, :"login request failed"}
 
+  def refresh(conn, %{"refresh" => refresh_token}) do
+    case Guardian.decode_and_verify(refresh_token) do
+      {:ok, %{"sub" => user_id, "typ" => "refresh"}} ->
+        user = UserManager.get_user!(user_id)
+        token_pair = generate_token_pair(user)
+
+        json(conn, %{
+          message: "access token refreshed successfully",
+          access_token: token_pair.access
+        })
+
+      {:ok, %{"typ" => _other_type}} ->
+        {:error, :"invalid token type"}
+
+      {:ok, _claims_without_typ} ->
+        {:error, :"invalid token type"}
+
+      {:error, _reason} ->
+        {:error, :invalid_token}
+    end
+  end
+
+  def refresh(_conn, _params), do: {:error, :bad_request}
+
   defp generate_token_pair(user) do
     {:ok, access_token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "access")
     {:ok, refresh_token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "refresh")

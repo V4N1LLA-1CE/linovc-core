@@ -6,8 +6,10 @@ defmodule LinovcCoreWeb.Router do
   end
 
   pipeline :auth do
-    plug Guardian.Plug.Pipeline, module: LinovcCore.UserManager.Guardian,
-                                 error_handler: LinovcCoreWeb.Guardian.ErrorHandler
+    plug Guardian.Plug.Pipeline,
+      module: LinovcCore.UserManager.Guardian,
+      error_handler: LinovcCoreWeb.Guardian.ErrorHandler
+
     plug Guardian.Plug.VerifyHeader, realm: "Bearer"
     plug Guardian.Plug.EnsureAuthenticated
     plug Guardian.Plug.LoadResource
@@ -19,12 +21,13 @@ defmodule LinovcCoreWeb.Router do
     scope "/auth" do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
+      post "/refresh", AuthController, :refresh
     end
   end
 
   scope "/api", LinovcCoreWeb do
     pipe_through [:api, :auth]
-    
+
     get "/profile", UserController, :profile
   end
 
