@@ -5,8 +5,27 @@ defmodule LinovcCoreWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug Guardian.Plug.Pipeline, module: LinovcCore.UserManager.Guardian,
+                                 error_handler: LinovcCoreWeb.Guardian.ErrorHandler
+    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.EnsureAuthenticated
+    plug Guardian.Plug.LoadResource
+  end
+
   scope "/api", LinovcCoreWeb do
     pipe_through :api
+
+    scope "/auth" do
+      post "/register", AuthController, :register
+      post "/login", AuthController, :login
+    end
+  end
+
+  scope "/api", LinovcCoreWeb do
+    pipe_through [:api, :auth]
+    
+    get "/profile", UserController, :profile
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
