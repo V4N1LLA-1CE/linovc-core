@@ -3,8 +3,7 @@ defmodule LinovcCore.Repo.Migrations.UserDetailsEnhancement do
 
   def change do
     alter(table(:users)) do
-      add :firstname, :text
-      add :lastname, :text
+      add :name, :text
       add :headline, :text
       add :bio, :text
       add :location, :text

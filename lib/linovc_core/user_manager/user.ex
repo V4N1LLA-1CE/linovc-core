@@ -5,8 +5,7 @@ defmodule LinovcCore.UserManager.User do
   schema "users" do
     field :email, :string
     field :password, :string
-    field :firstname, :string
-    field :lastname, :string
+    field :name, :string
     field :headline, :string
     field :bio, :string
     field :location, :string
@@ -17,7 +16,7 @@ defmodule LinovcCore.UserManager.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :firstname, :lastname, :headline, :bio, :location])
+    |> cast(attrs, [:email, :password, :name, :headline, :bio, :location])
     |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
     |> validate_length(:password, min: 8, message: "must be at least 8 characters")
