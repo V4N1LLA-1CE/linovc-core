@@ -13,6 +13,7 @@ defmodule LinovcCoreWeb.FallbackController do
     |> json(%{message: "unauthorized"})
   end
 
+  # handles ecto errors
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
@@ -42,4 +43,3 @@ defmodule LinovcCoreWeb.FallbackController do
     end)
   end
 end
-
