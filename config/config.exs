@@ -39,6 +39,11 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Guardian configs for JWT auth
+config :linovc_core, LinovcCore.UserManager.Guardian,
+  issuer: "linovc_core",
+  secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
