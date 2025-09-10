@@ -25,10 +25,11 @@ defmodule LinovcCoreWeb.Router do
     end
   end
 
-  scope "/api", LinovcCoreWeb do
+  scope "/api/profile", LinovcCoreWeb do
     pipe_through [:api, :auth]
 
-    get "/profile", UserController, :profile
+    get "", UserController, :profile
+    patch "/update", UserController, :update
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
