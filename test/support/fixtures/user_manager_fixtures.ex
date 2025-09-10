@@ -7,7 +7,7 @@ defmodule LinovcCore.UserManagerFixtures do
   @doc """
   Generate a unique user email.
   """
-  def unique_user_email, do: "some email#{System.unique_integer([:positive])}"
+  def unique_user_email, do: "#{System.unique_integer([:positive])}@gmail.com"
 
   @doc """
   Generate a user.

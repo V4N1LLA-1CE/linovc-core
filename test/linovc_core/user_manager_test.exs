@@ -1,4 +1,5 @@
 defmodule LinovcCore.UserManagerTest do
+  alias LinovcCore.UserManagerFixtures
   use LinovcCore.DataCase
 
   alias LinovcCore.UserManager
@@ -21,11 +22,12 @@ defmodule LinovcCore.UserManagerTest do
     end
 
     test "create_user/1 with valid data creates a user" do
-      valid_attrs = %{password: "some password", email: "some email"}
+      email = unique_user_email()
+      valid_attrs = %{password: "some password", email: email}
 
       assert {:ok, %User{} = user} = UserManager.create_user(valid_attrs)
       assert Argon2.verify_pass("some password", user.password)
-      assert user.email == "some email"
+      assert user.email == email
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -34,11 +36,16 @@ defmodule LinovcCore.UserManagerTest do
 
     test "update_user/2 with valid data updates the user" do
       user = user_fixture()
-      update_attrs = %{password: "some updated password", email: "some updated email"}
+      email = unique_user_email()
+
+      update_attrs = %{
+        password: "some updated password",
+        email: email
+      }
 
       assert {:ok, %User{} = user} = UserManager.update_user(user, update_attrs)
       assert Argon2.verify_pass("some updated password", user.password)
-      assert user.email == "some updated email"
+      assert user.email == email
     end
 
     test "update_user/2 with invalid data returns error changeset" do
