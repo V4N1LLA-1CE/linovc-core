@@ -20,6 +20,10 @@ defmodule LinovcCore.UserManager.User do
     |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
     |> validate_length(:password, min: 8, message: "must be at least 8 characters")
+    |> validate_length(:name, max: 255, message: "cannot exceed 255 characters")
+    |> validate_length(:headline, max: 255, message: "cannot exceed 255 characters")
+    |> validate_length(:bio, max: 1000, message: "cannot exceed 1000 characters")
+    |> validate_length(:location, max: 255, message: "cannot exceed 255 characters")
     |> unique_constraint(:email)
     |> hash_password()
   end
