@@ -48,4 +48,3 @@ defmodule LinovcCoreWeb.UserController do
     end
   end
 end
-

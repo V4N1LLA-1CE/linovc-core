@@ -28,7 +28,7 @@ defmodule LinovcCoreWeb.Router do
   scope "/api/profile", LinovcCoreWeb do
     pipe_through [:api, :auth]
 
-    get "", UserController, :profile
+    get "/", UserController, :profile
     patch "/update", UserController, :update
   end
 
