@@ -57,7 +57,8 @@ defmodule LinovcCore.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
       {:guardian, "~> 2.3"},
-      {:argon2_elixir, "~> 2.0"}
+      {:argon2_elixir, "~> 2.0"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
