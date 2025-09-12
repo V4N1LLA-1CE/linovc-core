@@ -2,6 +2,7 @@ defmodule LinovcCoreWeb.Router do
   use LinovcCoreWeb, :router
 
   pipeline :api do
+    plug CORSPlug
     plug :accepts, ["json"]
   end
 
