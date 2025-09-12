@@ -1,8 +1,9 @@
 defmodule LinovcCore.UserManager.User do
+  alias LinovcCore.Permissions
   use Ecto.Schema
   import Ecto.Changeset
 
-  @scopes ~w(user:default admin:default)
+  @derive {Jason.Encoder, except: [:password, :inserted_at, :updated_at, :__meta__]}
 
   schema "users" do
     field :email, :string
@@ -40,7 +41,7 @@ defmodule LinovcCore.UserManager.User do
 
   defp validate_scopes(%Ecto.Changeset{valid?: true, changes: %{scopes: scopes}} = changeset) do
     # check if each value is valid
-    invalid_scopes = Enum.reject(scopes, fn sc -> sc in @scopes end)
+    invalid_scopes = Enum.reject(scopes, fn sc -> sc in Permissions.valid_scopes() end)
 
     if Enum.empty?(invalid_scopes) do
       changeset

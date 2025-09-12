@@ -1,9 +1,16 @@
 defmodule LinovcCore.UserManager.Guardian do
-  use Guardian, otp_app: :linovc_core
-
+  alias LinovcCore.Permissions
   alias LinovcCore.UserManager
 
-  def build_claims(claims, _resource, opts) do
+  use Guardian,
+    otp_app: :linovc_core,
+    permissions: %{
+      scopes: Permissions.valid_scopes()
+    }
+
+  use Guardian.Permissions, encoding: Guardian.Permissions.BitwiseEncoding
+
+  def build_claims(claims, resource, opts) do
     token_type = Keyword.get(opts, :token_type, "access")
 
     exp =
@@ -16,10 +23,13 @@ defmodule LinovcCore.UserManager.Guardian do
         _ -> System.system_time(:second) + 60 * 3
       end
 
+    permissions = %{scopes: resource.scopes}
+
     claims =
       claims
       |> Map.put("exp", exp)
       |> Map.put("typ", token_type)
+      |> encode_permissions_into_claims!(permissions)
 
     {:ok, claims}
   end
