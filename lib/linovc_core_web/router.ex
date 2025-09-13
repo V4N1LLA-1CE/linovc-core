@@ -18,6 +18,8 @@ defmodule LinovcCoreWeb.Router do
   scope "/api", LinovcCoreWeb do
     pipe_through :api
 
+    options "/*path", AuthController, :options
+
     scope "/auth" do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
