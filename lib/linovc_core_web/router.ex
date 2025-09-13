@@ -11,7 +11,7 @@ defmodule LinovcCoreWeb.Router do
       module: LinovcCore.UserManager.Guardian,
       error_handler: LinovcCoreWeb.Guardian.ErrorHandler
 
-    plug Guardian.Plug.VerifyHeader, realm: "Bearer"
+    plug Guardian.Plug.VerifyHeader, scheme: "Bearer"
     plug Guardian.Plug.EnsureAuthenticated
     plug LinovcCoreWeb.Plugs.EnsureAccessToken
   end
