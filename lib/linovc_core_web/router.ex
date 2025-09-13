@@ -13,6 +13,7 @@ defmodule LinovcCoreWeb.Router do
 
     plug Guardian.Plug.VerifyHeader, realm: "Bearer"
     plug Guardian.Plug.EnsureAuthenticated
+    plug LinovcCoreWeb.Plugs.EnsureAccessToken
   end
 
   scope "/api", LinovcCoreWeb do
