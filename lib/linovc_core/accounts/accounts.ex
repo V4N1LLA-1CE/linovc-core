@@ -1,6 +1,6 @@
 defmodule LinovcCore.Accounts do
   @moduledoc """
-  The UserManager context.
+  The Accounts context.
   """
 
   import Ecto.Query, warn: false

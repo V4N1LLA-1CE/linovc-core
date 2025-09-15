@@ -1,6 +1,5 @@
 defmodule LinovcCore.Accounts.Guardian do
   alias LinovcCore.Auth.JWT.Permissions
-  alias LinovcCore.Accounts
 
   use Guardian,
     otp_app: :linovc_core,
@@ -39,7 +38,7 @@ defmodule LinovcCore.Accounts.Guardian do
   end
 
   def resource_from_claims(%{"sub" => id, "typ" => "access"}) do
-    user = UserManager.get_user!(id)
+    user = Accounts.get_user!(id)
     {:ok, user}
   rescue
     Ecto.NoResultsError -> {:error, :resource_not_found}

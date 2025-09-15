@@ -7,7 +7,7 @@ defmodule LinovcCoreWeb.AuthController do
   alias LinovcCore.Accounts.Guardian
 
   def register(conn, %{"user" => user_params}) do
-    case UserManager.create_user(user_params) do
+    case Accounts.create_user(user_params) do
       {:ok, user} ->
         token_pair = generate_token_pair(user)
 
@@ -30,7 +30,7 @@ defmodule LinovcCoreWeb.AuthController do
   def register(_conn, _params), do: {:error, :"register request failed"}
 
   def login(conn, %{"email" => email, "password" => password}) do
-    case UserManager.authenticate_user(email, password) do
+    case Accounts.authenticate_user(email, password) do
       {:ok, user} ->
         token_pair = generate_token_pair(user)
 
@@ -53,7 +53,7 @@ defmodule LinovcCoreWeb.AuthController do
   def refresh(conn, %{"refresh" => refresh_token}) do
     case Guardian.decode_and_verify(refresh_token) do
       {:ok, %{"sub" => user_id, "typ" => "refresh"}} ->
-        user = UserManager.get_user!(user_id)
+        user = Accounts.get_user!(user_id)
         token_pair = generate_token_pair(user)
 
         json(conn, %{
