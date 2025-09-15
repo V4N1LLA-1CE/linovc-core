@@ -28,13 +28,6 @@ defmodule LinovcCoreWeb.Router do
     end
   end
 
-  scope "/api/profile", LinovcCoreWeb do
-    pipe_through [:api, :auth]
-
-    get "/", UserController, :profile
-    patch "/update", UserController, :update
-  end
-
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:linovc_core, :dev_routes) do
     # If you want to use the LiveDashboard in production, you should put
