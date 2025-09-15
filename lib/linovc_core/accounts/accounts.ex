@@ -1,4 +1,4 @@
-defmodule LinovcCore.UserManager do
+defmodule LinovcCore.Accounts do
   @moduledoc """
   The UserManager context.
   """
@@ -7,7 +7,7 @@ defmodule LinovcCore.UserManager do
   alias LinovcCore.Repo
   alias Argon2
 
-  alias LinovcCore.UserManager.User
+  alias LinovcCore.Accounts.User
 
   @doc """
   Returns the list of users.

@@ -3,8 +3,8 @@ defmodule LinovcCoreWeb.AuthController do
 
   action_fallback LinovcCoreWeb.FallbackController
 
-  alias LinovcCore.UserManager
-  alias LinovcCore.UserManager.Guardian
+  alias LinovcCore.Accounts
+  alias LinovcCore.Accounts.Guardian
 
   def register(conn, %{"user" => user_params}) do
     case UserManager.create_user(user_params) do

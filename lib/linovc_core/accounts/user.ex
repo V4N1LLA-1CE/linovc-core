@@ -1,5 +1,5 @@
-defmodule LinovcCore.UserManager.User do
-  alias LinovcCore.Permissions
+defmodule LinovcCore.Accounts.User do
+  alias LinovcCore.Auth.JWT.Permissions
   use Ecto.Schema
   import Ecto.Changeset
 

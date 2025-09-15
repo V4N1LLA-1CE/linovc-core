@@ -1,13 +1,13 @@
-defmodule LinovcCore.UserManagerTest do
-  alias LinovcCore.UserManagerFixtures
+defmodule LinovcCore.AccountsTest do
+  alias LinovcCore.AccountsFixtures
   use LinovcCore.DataCase
 
-  alias LinovcCore.UserManager
+  alias LinovcCore.Accounts
 
   describe "users" do
-    alias LinovcCore.UserManager.User
+    alias LinovcCore.Accounts.User
 
-    import LinovcCore.UserManagerFixtures
+    import LinovcCore.AccountsFixtures
 
     @invalid_attrs %{password: nil, email: nil}
 

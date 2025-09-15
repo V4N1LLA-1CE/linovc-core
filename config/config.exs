@@ -40,7 +40,7 @@ config :logger, :default_formatter,
 config :phoenix, :json_library, Jason
 
 # Guardian configs for JWT auth
-config :linovc_core, LinovcCore.UserManager.Guardian,
+config :linovc_core, LinovcCore.Accounts.Guardian,
   issuer: "linovc_core",
   secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
 

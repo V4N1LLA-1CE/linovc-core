@@ -1,7 +1,7 @@
-defmodule LinovcCore.UserManagerFixtures do
+defmodule LinovcCore.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `LinovcCore.UserManager` context.
+  entities via the `LinovcCore.Accounts` context.
   """
 
   @doc """
@@ -19,7 +19,7 @@ defmodule LinovcCore.UserManagerFixtures do
         email: unique_user_email(),
         password: "some password"
       })
-      |> LinovcCore.UserManager.create_user()
+      |> LinovcCore.Accounts.create_user()
 
     user
   end

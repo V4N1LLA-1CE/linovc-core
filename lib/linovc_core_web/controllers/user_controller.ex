@@ -3,8 +3,8 @@ defmodule LinovcCoreWeb.UserController do
 
   action_fallback LinovcCoreWeb.FallbackController
 
-  alias LinovcCore.UserManager
-  alias LinovcCore.UserManager.Guardian
+  alias LinovcCore.Accounts
+  alias LinovcCore.Accounts.Guardian
 
   def profile(conn, _params) do
     claims = Guardian.Plug.current_claims(conn)

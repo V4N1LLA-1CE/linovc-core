@@ -8,7 +8,7 @@ defmodule LinovcCoreWeb.Router do
 
   pipeline :auth do
     plug Guardian.Plug.Pipeline,
-      module: LinovcCore.UserManager.Guardian,
+      module: LinovcCore.Accounts.Guardian,
       error_handler: LinovcCoreWeb.Guardian.ErrorHandler
 
     plug Guardian.Plug.VerifyHeader, scheme: "Bearer"

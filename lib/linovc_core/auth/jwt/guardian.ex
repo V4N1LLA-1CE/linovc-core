@@ -1,6 +1,6 @@
-defmodule LinovcCore.UserManager.Guardian do
-  alias LinovcCore.Permissions
-  alias LinovcCore.UserManager
+defmodule LinovcCore.Accounts.Guardian do
+  alias LinovcCore.Auth.JWT.Permissions
+  alias LinovcCore.Accounts
 
   use Guardian,
     otp_app: :linovc_core,
