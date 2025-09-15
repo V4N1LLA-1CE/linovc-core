@@ -3,11 +3,18 @@ defmodule LinovcCoreWeb.AuthController do
 
   action_fallback LinovcCoreWeb.FallbackController
 
+  alias LinovcCore.Auth.Permissions
   alias LinovcCore.Accounts
   alias LinovcCore.Accounts.Guardian
 
-  def register(conn, %{"user" => user_params}) do
-    case Accounts.create_user(user_params) do
+  def register(conn, %{
+        "user" => %{"email" => _email, "password" => _password, "type" => type} = user_params
+      }) do
+    if(type not in Permissions.valid_scopes()) do
+      {:error, :invalid_account_type}
+    end
+
+    case(Accounts.create_user(user_params)) do
       {:ok, user} ->
         token_pair = generate_token_pair(user)
 

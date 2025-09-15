@@ -1,5 +1,5 @@
 defmodule LinovcCore.Accounts.Guardian do
-  alias LinovcCore.Auth.JWT.Permissions
+  alias LinovcCore.Auth.Permissions
   alias LinovcCore.Accounts
 
   use Guardian,
