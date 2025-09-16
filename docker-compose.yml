@@ -1,11 +1,11 @@
 services:
   postgres:
     image: postgres:17-alpine
-    container_name: linovc_core_postgres
+    container_name: venli-postgres
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: toor
-      POSTGRES_DB: linovc_core_db
+      POSTGRES_DB: venli_db
     ports:
       - "5432:5432"
     volumes:

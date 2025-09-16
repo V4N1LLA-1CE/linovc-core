@@ -5,7 +5,7 @@ config :linovc_core, LinovcCore.Repo,
   username: "root",
   password: "toor",
   hostname: "localhost",
-  database: "linovc_core_db",
+  database: "venli_db",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
