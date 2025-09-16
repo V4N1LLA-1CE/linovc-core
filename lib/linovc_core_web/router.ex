@@ -25,6 +25,10 @@ defmodule LinovcCoreWeb.Router do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
       post "/refresh", AuthController, :refresh
+
+      # OAuth routes - Ueberauth expects /auth/:provider pattern
+      get "/google", OAuthController, :request
+      get "/google/callback", OAuthController, :callback
     end
   end
 
