@@ -1,7 +1,7 @@
-defmodule LinovcCore.AccountsFixtures do
+defmodule VenliCore.AccountsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `LinovcCore.Accounts` context.
+  entities via the `VenliCore.Accounts` context.
   """
 
   @doc """
@@ -19,7 +19,7 @@ defmodule LinovcCore.AccountsFixtures do
         email: unique_user_email(),
         password: "some password"
       })
-      |> LinovcCore.Accounts.create_user()
+      |> VenliCore.Accounts.create_user()
 
     user
   end

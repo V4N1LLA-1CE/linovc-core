@@ -1,0 +1,40 @@
+defmodule VenliCore.Application do
+  # See https://hexdocs.pm/elixir/Application.html
+  # for more information on OTP Applications
+  @moduledoc false
+
+  use Application
+
+  @impl true
+
+  def start(_type, _args) do
+    # load env on start
+    if Mix.env() == :dev do
+      Dotenv.load()
+    end
+
+    children = [
+      VenliCoreWeb.Telemetry,
+      VenliCore.Repo,
+      {DNSCluster, query: Application.get_env(:venli_core, :dns_cluster_query) || :ignore},
+      {Phoenix.PubSub, name: VenliCore.PubSub},
+      # Start a worker by calling: VenliCore.Worker.start_link(arg)
+      # {VenliCore.Worker, arg},
+      # Start to serve requests, typically the last entry
+      VenliCoreWeb.Endpoint
+    ]
+
+    # See https://hexdocs.pm/elixir/Supervisor.html
+    # for other strategies and supported options
+    opts = [strategy: :one_for_one, name: VenliCore.Supervisor]
+    Supervisor.start_link(children, opts)
+  end
+
+  # Tell Phoenix to update the endpoint configuration
+  # whenever the application is updated.
+  @impl true
+  def config_change(changed, _new, removed) do
+    VenliCoreWeb.Endpoint.config_change(changed, removed)
+    :ok
+  end
+end

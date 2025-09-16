@@ -1,4 +1,4 @@
-# LinovcCore
+# VenliCore
 
 To start your Phoenix server:
 

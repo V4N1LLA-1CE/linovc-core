@@ -1,4 +1,4 @@
-defmodule LinovcCore.Repo.Migrations.UserDetailsEnhancement do
+defmodule VenliCore.Repo.Migrations.UserDetailsEnhancement do
   use Ecto.Migration
 
   def change do

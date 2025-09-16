@@ -1,4 +1,4 @@
-defmodule LinovcCore.Repo.Migrations.AddScopesToUser do
+defmodule VenliCore.Repo.Migrations.AddScopesToUser do
   use Ecto.Migration
 
   def change do

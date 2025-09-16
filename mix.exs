@@ -1,9 +1,9 @@
-defmodule LinovcCore.MixProject do
+defmodule VenliCore.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :linovc_core,
+      app: :venli_core,
       version: "0.1.0",
       elixir: "~> 1.15",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -12,7 +12,7 @@ defmodule LinovcCore.MixProject do
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
       test_coverage: [
-        ignore_modules: [LinovcCoreWeb.Gettext],
+        ignore_modules: [VenliCoreWeb.Gettext],
         summary: [threshold: 85]
       ]
     ]
@@ -23,7 +23,7 @@ defmodule LinovcCore.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {LinovcCore.Application, []},
+      mod: {VenliCore.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

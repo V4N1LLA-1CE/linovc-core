@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :linovc_core,
-  ecto_repos: [LinovcCore.Repo],
+config :venli_core,
+  ecto_repos: [VenliCore.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :linovc_core, LinovcCoreWeb.Endpoint,
+config :venli_core, VenliCoreWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [json: LinovcCoreWeb.ErrorJSON],
+    formats: [json: VenliCoreWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: LinovcCore.PubSub,
+  pubsub_server: VenliCore.PubSub,
   live_view: [signing_salt: "8tyTVCBw"]
 
 # Configures the mailer
@@ -29,7 +29,7 @@ config :linovc_core, LinovcCoreWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :linovc_core, LinovcCore.Mailer, adapter: Swoosh.Adapters.Local
+config :venli_core, VenliCore.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configures Elixir's Logger
 config :logger, :default_formatter,
@@ -40,7 +40,7 @@ config :logger, :default_formatter,
 config :phoenix, :json_library, Jason
 
 # Guardian configs for JWT auth
-config :linovc_core, LinovcCore.Accounts.Guardian,
+config :venli_core, VenliCore.Accounts.Guardian,
   issuer: "venli-backend-core",
   secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
 
