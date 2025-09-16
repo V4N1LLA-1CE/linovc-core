@@ -41,7 +41,7 @@ config :phoenix, :json_library, Jason
 
 # Guardian configs for JWT auth
 config :linovc_core, LinovcCore.Accounts.Guardian,
-  issuer: "linovc_core",
+  issuer: "venli-backend-core",
   secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
 
 config :ueberauth, Ueberauth,
