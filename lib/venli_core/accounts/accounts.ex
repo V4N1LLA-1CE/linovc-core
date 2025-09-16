@@ -145,15 +145,12 @@ defmodule VenliCore.Accounts do
         })
 
       existing_user ->
-        # auto-link: update name if not set, ensure account type is included
-        updated_scopes =
-          if account_type in existing_user.scopes do
-            existing_user.scopes
-          else
-            [account_type | existing_user.scopes]
-          end
+        # auto-link: update name if not set, don't update account
+        # scopes if already existing user 
+        # only allow updating scopes if user doesn't exist 
 
-        update_attrs = %{scopes: updated_scopes}
+        # update existing user logic
+        update_attrs = %{}
 
         update_attrs =
           if is_nil(existing_user.name) or existing_user.name == "" do
