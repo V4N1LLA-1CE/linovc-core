@@ -3,15 +3,11 @@ defmodule VenliCore.Application do
   # for more information on OTP Applications
   @moduledoc false
 
+
   use Application
 
   @impl true
-
   def start(_type, _args) do
-    # load env on start
-    if Mix.env() == :dev do
-      Dotenv.load()
-    end
 
     children = [
       VenliCoreWeb.Telemetry,
