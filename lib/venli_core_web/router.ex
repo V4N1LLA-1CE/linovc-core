@@ -6,6 +6,12 @@ defmodule VenliCoreWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :oauth do
+    plug :fetch_session
+    plug CORSPlug
+    plug :accepts, ["json"]
+  end
+
   pipeline :auth do
     plug Guardian.Plug.Pipeline,
       module: VenliCore.Accounts.Guardian,
@@ -25,10 +31,15 @@ defmodule VenliCoreWeb.Router do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
       post "/refresh", AuthController, :refresh
+    end
 
-      # OAuth routes - Ueberauth expects /auth/:provider pattern
-      get "/google", OAuthController, :request
-      get "/google/callback", OAuthController, :callback
+    # OAuth routes with session support to store state
+    # between register and callbacks
+    scope "/auth" do
+      pipe_through :oauth
+
+      get "/:provider", OAuthController, :request
+      get "/:provider/callback", OAuthController, :callback
     end
   end
 
