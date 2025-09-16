@@ -58,7 +58,10 @@ defmodule LinovcCore.MixProject do
       {:bandit, "~> 1.5"},
       {:guardian, "~> 2.3"},
       {:argon2_elixir, "~> 2.0"},
-      {:cors_plug, "~> 3.0"}
+      {:cors_plug, "~> 3.0"},
+      {:ueberauth, "~> 0.10"},
+      {:ueberauth_google, "~> 0.12"},
+      {:dotenv, "~> 3.0", only: [:dev, :test]}
     ]
   end
 

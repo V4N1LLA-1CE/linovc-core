@@ -5,6 +5,7 @@ defmodule LinovcCoreWeb.AuthController do
 
   alias LinovcCore.Accounts
   alias LinovcCore.Accounts.Guardian
+  alias LinovcCore.Auth.TokenGenerator
 
   def register(conn, %{
         "user" => %{"email" => email, "password" => password, "type" => account_type}
@@ -17,7 +18,7 @@ defmodule LinovcCoreWeb.AuthController do
 
     case(Accounts.create_user(user_data)) do
       {:ok, user} ->
-        token_pair = generate_token_pair(user)
+        token_pair = TokenGenerator.generate_token_pair(user)
 
         conn
         |> put_status(:created)
@@ -40,7 +41,7 @@ defmodule LinovcCoreWeb.AuthController do
   def login(conn, %{"email" => email, "password" => password}) do
     case Accounts.authenticate_user(email, password) do
       {:ok, user} ->
-        token_pair = generate_token_pair(user)
+        token_pair = TokenGenerator.generate_token_pair(user)
 
         json(conn, %{
           message: "login successful",
@@ -62,7 +63,7 @@ defmodule LinovcCoreWeb.AuthController do
     case Guardian.decode_and_verify(refresh_token) do
       {:ok, %{"sub" => user_id, "typ" => "refresh"}} ->
         user = Accounts.get_user!(user_id)
-        token_pair = generate_token_pair(user)
+        token_pair = TokenGenerator.generate_token_pair(user)
 
         json(conn, %{
           message: "access token refreshed successfully",
@@ -82,13 +83,4 @@ defmodule LinovcCoreWeb.AuthController do
 
   def refresh(_conn, _params), do: {:error, :bad_request}
 
-  defp generate_token_pair(user) do
-    {:ok, access_token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "access")
-    {:ok, refresh_token, _claims} = Guardian.encode_and_sign(user, %{}, token_type: "refresh")
-
-    %{
-      access: access_token,
-      refresh: refresh_token
-    }
-  end
 end
