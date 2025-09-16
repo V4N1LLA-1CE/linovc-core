@@ -6,7 +6,13 @@ defmodule LinovcCore.Application do
   use Application
 
   @impl true
+
   def start(_type, _args) do
+    # load env on start
+    if Mix.env() == :dev do
+      Dotenv.load()
+    end
+
     children = [
       LinovcCoreWeb.Telemetry,
       LinovcCore.Repo,
