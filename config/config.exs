@@ -45,13 +45,11 @@ config :venli_core, VenliCore.Accounts.Guardian,
   secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
 
 config :ueberauth, Ueberauth,
+  base_path: "/api/auth",
   providers: [
     google: {Ueberauth.Strategy.Google, []}
   ]
 
-config :ueberauth, Ueberauth.Strategy.Google.OAuth,
-  client_id: System.get_env("GOOGLE_CLIENT_ID"),
-  client_secret: System.get_env("GOOGLE_CLIENT_SECRET")
 
 config :cors_plug,
   origin: ["http://localhost:3000"],
