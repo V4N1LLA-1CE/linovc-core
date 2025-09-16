@@ -17,8 +17,8 @@ defmodule LinovcCore.Accounts.Guardian do
       case token_type do
         # 3 minutes for access
         "access" -> System.system_time(:second) + 60 * 3
-        # 24 hours for refresh
-        "refresh" -> System.system_time(:second) + 60 * 60 * 24
+        # 7 days for refresh
+        "refresh" -> System.system_time(:second) + 60 * 60 * 24 * 7
         # default to 3 mins
         _ -> System.system_time(:second) + 60 * 3
       end
