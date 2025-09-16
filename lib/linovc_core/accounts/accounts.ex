@@ -119,4 +119,54 @@ defmodule LinovcCore.Accounts do
         end
     end
   end
+
+  @doc """
+  Gets a user by email.
+  """
+  def get_user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
+
+  @doc """
+  Creates or updates a user from OAuth data with auto-linking by email.
+  """
+  def create_or_update_oauth_user(oauth_info, account_type) do
+    email = oauth_info.info.email
+    name = oauth_info.info.name
+
+    case get_user_by_email(email) do
+      nil ->
+        # create new user
+        create_user(%{
+          email: email,
+          name: name,
+          password: generate_random_password(),
+          scopes: [account_type]
+        })
+
+      existing_user ->
+        # auto-link: update name if not set, ensure account type is included
+        updated_scopes =
+          if account_type in existing_user.scopes do
+            existing_user.scopes
+          else
+            [account_type | existing_user.scopes]
+          end
+
+        update_attrs = %{scopes: updated_scopes}
+
+        update_attrs =
+          if is_nil(existing_user.name) or existing_user.name == "" do
+            Map.put(update_attrs, :name, name)
+          else
+            update_attrs
+          end
+
+        update_user(existing_user, update_attrs)
+    end
+  end
+
+  defp generate_random_password do
+    :crypto.strong_rand_bytes(32) |> Base.encode64()
+  end
 end
