@@ -39,17 +39,11 @@ config :logger, :default_formatter,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Guardian configs for JWT auth
-config :venli_core, VenliCore.Accounts.Guardian,
-  issuer: "venli-backend-core",
-  secret_key: "-jKMZybcHHWaAKXyV3cp1nxNiFo673AKChqJAV4nNRz1Ej9etBbyaV-a_Z1wm9Z_"
-
 config :ueberauth, Ueberauth,
   base_path: "/api/auth",
   providers: [
     google: {Ueberauth.Strategy.Google, []}
   ]
-
 
 config :cors_plug,
   origin: ["http://localhost:3000"],
