@@ -3,17 +3,18 @@ defmodule VenliCoreWeb.AuthController do
 
   action_fallback VenliCoreWeb.FallbackController
 
+  alias VenliCore.Auth.Permissions
   alias VenliCore.Accounts
   alias VenliCore.Accounts.Guardian
   alias VenliCore.Auth.TokenGenerator
 
   def register(conn, %{
-        "user" => %{"email" => email, "password" => password, "type" => account_type}
+        "user" => %{"email" => email, "password" => password}
       }) do
     user_data = %{
       email: email,
       password: password,
-      scopes: [account_type]
+      scopes: [Permissions.default_scope()]
     }
 
     case(Accounts.create_user(user_data)) do
@@ -24,11 +25,7 @@ defmodule VenliCoreWeb.AuthController do
         |> put_status(:created)
         |> json(%{
           message: "user created successfully",
-          token: token_pair,
-          user: %{
-            id: user.id,
-            email: user.email
-          }
+          token: token_pair
         })
 
       {:error, changeset} ->
@@ -45,11 +42,7 @@ defmodule VenliCoreWeb.AuthController do
 
         json(conn, %{
           message: "login successful",
-          token: token_pair,
-          user: %{
-            id: user.id,
-            email: user.email
-          }
+          token: token_pair
         })
 
       {:error, :invalid_credentials} ->

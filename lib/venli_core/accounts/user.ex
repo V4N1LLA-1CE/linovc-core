@@ -21,7 +21,7 @@ defmodule VenliCore.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:email, :password, :name, :headline, :bio, :location, :scopes])
-    |> validate_required([:email, :password, :scopes])
+    |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
     |> validate_length(:password, min: 8, message: "must be at least 8 characters")
     |> validate_length(:name, max: 255, message: "cannot exceed 255 characters")

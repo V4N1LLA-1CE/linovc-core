@@ -4,6 +4,7 @@ defmodule VenliCore.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias VenliCore.Auth.Permissions
   alias VenliCore.Repo
   alias Argon2
 
@@ -130,7 +131,7 @@ defmodule VenliCore.Accounts do
   @doc """
   Creates or updates a user from OAuth data with auto-linking by email.
   """
-  def create_or_update_oauth_user(oauth_info, account_type) do
+  def create_or_link_oauth_user(oauth_info) do
     email = oauth_info.info.email
     name = oauth_info.info.name
 
@@ -141,15 +142,11 @@ defmodule VenliCore.Accounts do
           email: email,
           name: name,
           password: generate_random_password(),
-          scopes: [account_type]
+          scopes: [Permissions.default_scope()]
         })
 
       existing_user ->
-        # auto-link: update name if not set, don't update account
-        # scopes if already existing user 
-        # only allow updating scopes if user doesn't exist 
-
-        # update existing user logic
+        # auto-link: update name if not set
         update_attrs = %{}
 
         update_attrs =
