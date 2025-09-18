@@ -60,8 +60,7 @@ defmodule VenliCore.MixProject do
       {:argon2_elixir, "~> 2.0"},
       {:cors_plug, "~> 3.0"},
       {:ueberauth, "~> 0.10.8"},
-      {:ueberauth_google, "~> 0.12.1"},
-      {:dotenv, "~> 3.0", only: [:dev, :test]}
+      {:ueberauth_google, "~> 0.12.1"}
     ]
   end
 

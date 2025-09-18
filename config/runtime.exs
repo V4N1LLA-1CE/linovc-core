@@ -1,17 +1,5 @@
 import Config
 
-# Load environment variables from .env file in development
-if config_env() == :dev do
-  try do
-    # Load dotenv here at runtime
-    if Code.ensure_loaded?(Dotenv) do
-      Dotenv.load()
-    end
-  rescue
-    _ -> :ok
-  end
-end
-
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
 # system starts, so it is typically used to load production configuration
