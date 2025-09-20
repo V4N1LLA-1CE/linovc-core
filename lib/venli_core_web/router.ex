@@ -31,7 +31,7 @@ defmodule VenliCoreWeb.Router do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
       get "/refresh", AuthController, :refresh
-      get "/logout", AuthController, :logout
+      post "/logout", AuthController, :logout
     end
 
     # OAuth routes with session support to store state
