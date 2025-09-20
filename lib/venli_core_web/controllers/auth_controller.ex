@@ -94,4 +94,15 @@ defmodule VenliCoreWeb.AuthController do
         end
     end
   end
+
+  def logout(conn, _params) do
+    conn
+    |> put_resp_cookie(Cookies.refresh_cookie_key(), "",
+      http_only: true,
+      max_age: 0
+    )
+    |> json(%{
+      message: "logged out successfully"
+    })
+  end
 end
