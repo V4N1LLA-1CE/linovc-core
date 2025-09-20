@@ -4,12 +4,17 @@ defmodule VenliCoreWeb.OAuthController do
 
   action_fallback VenliCoreWeb.FallbackController
 
+  alias VenliCore.Auth.Cookies
   alias VenliCore.Accounts
   alias VenliCore.Auth.TokenGenerator
 
   def request(conn, _params) do
+    # oauth initiation gets handled by ueberauth
+    #
+    # in any case this fails, 
+    # have a fallback for internal server error
     conn
-    # ueberauth will handle the redirect, but we need a fallback response
+    |> put_status(:internal_server_error)
     |> json(%{message: "OAuth initialization failed"})
   end
 
@@ -18,12 +23,20 @@ defmodule VenliCoreWeb.OAuthController do
       {:ok, user} ->
         token_pair = TokenGenerator.generate_token_pair(user)
 
+        # for this response:
+        # return access token in json
+        # store refresh token in httpscookie 7 days
+        # redirect to frontend callback page with access token
+        frontend_url = System.get_env("FRONTEND_URL") || "http://localhost:3000"
+
         conn
-        |> json(%{
-          message: "OAuth login successful",
-          token: token_pair,
-          user: user
-        })
+        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
+          http_only: true,
+          secure: Mix.env() == :prod,
+          same_site: "Lax",
+          max_age: 7 * 24 * 60 * 60
+        )
+        |> redirect(external: "#{frontend_url}/oauth/callback?token=#{token_pair.access}")
 
       {:error, changeset} ->
         conn

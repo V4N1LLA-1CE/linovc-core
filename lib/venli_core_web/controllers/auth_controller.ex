@@ -7,6 +7,7 @@ defmodule VenliCoreWeb.AuthController do
   alias VenliCore.Accounts
   alias VenliCore.Accounts.Guardian
   alias VenliCore.Auth.TokenGenerator
+  alias VenliCore.Auth.Cookies
 
   def register(conn, %{
         "user" => %{"email" => email, "password" => password}
@@ -23,9 +24,15 @@ defmodule VenliCoreWeb.AuthController do
 
         conn
         |> put_status(:created)
+        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
+          http_only: true,
+          secure: Mix.env() == :prod,
+          same_site: "Lax",
+          max_age: 7 * 24 * 60 * 60
+        )
         |> json(%{
           message: "user created successfully",
-          token: token_pair
+          access_token: token_pair.access
         })
 
       {:error, changeset} ->
@@ -40,9 +47,16 @@ defmodule VenliCoreWeb.AuthController do
       {:ok, user} ->
         token_pair = TokenGenerator.generate_token_pair(user)
 
-        json(conn, %{
+        conn
+        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
+          http_only: true,
+          secure: Mix.env() == :prod,
+          same_site: "Lax",
+          max_age: 7 * 24 * 60 * 60
+        )
+        |> json(%{
           message: "login successful",
-          token: token_pair
+          access_token: token_pair.access
         })
 
       {:error, :invalid_credentials} ->
@@ -52,27 +66,32 @@ defmodule VenliCoreWeb.AuthController do
 
   def login(_conn, _params), do: {:error, :"login request failed"}
 
-  def refresh(conn, %{"refresh" => refresh_token}) do
-    case Guardian.decode_and_verify(refresh_token) do
-      {:ok, %{"sub" => user_id, "typ" => "refresh"}} ->
-        user = Accounts.get_user!(user_id)
-        token_pair = TokenGenerator.generate_token_pair(user)
+  def refresh(conn, _params) do
+    case conn.req_cookies[Cookies.refresh_cookie_key()] do
+      nil ->
+        {:error, :unauthorized}
 
-        json(conn, %{
-          message: "access token refreshed successfully",
-          access_token: token_pair.access
-        })
+      refresh_token ->
+        case Guardian.decode_and_verify(refresh_token) do
+          {:ok, %{"sub" => user_id, "typ" => "refresh"}} ->
+            user = Accounts.get_user!(user_id)
+            token_pair = TokenGenerator.generate_token_pair(user)
 
-      {:ok, %{"typ" => _other_type}} ->
-        {:error, :"invalid token type"}
+            conn
+            |> json(%{
+              message: "access token refreshed successfully",
+              access_token: token_pair.access
+            })
 
-      {:ok, _claims_without_typ} ->
-        {:error, :"invalid token type"}
+          {:ok, %{"typ" => _other_type}} ->
+            {:error, :invalid_token_type}
 
-      {:error, _reason} ->
-        {:error, :invalid_token}
+          {:ok, _claims_without_typ} ->
+            {:error, :invalid_token_type}
+
+          {:error, _reason} ->
+            {:error, :invalid_token}
+        end
     end
   end
-
-  def refresh(_conn, _params), do: {:error, :bad_request}
 end
