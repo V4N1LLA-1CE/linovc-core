@@ -54,6 +54,7 @@ defmodule VenliCoreWeb.AuthController do
           same_site: "Lax",
           max_age: 7 * 24 * 60 * 60
         )
+        |> put_status(:ok)
         |> json(%{
           message: "login successful",
           access_token: token_pair.access
@@ -78,6 +79,7 @@ defmodule VenliCoreWeb.AuthController do
             token_pair = TokenGenerator.generate_token_pair(user)
 
             conn
+            |> put_status(:ok)
             |> json(%{
               message: "access token refreshed successfully",
               access_token: token_pair.access
@@ -97,10 +99,12 @@ defmodule VenliCoreWeb.AuthController do
 
   def logout(conn, _params) do
     conn
-    |> put_resp_cookie(Cookies.refresh_cookie_key(), "",
+    |> delete_resp_cookie(Cookies.refresh_cookie_key(),
       http_only: true,
-      max_age: 0
+      secure: Mix.env() == :prod,
+      same_site: "Lax"
     )
+    |> put_status(:ok)
     |> json(%{
       message: "logged out successfully"
     })

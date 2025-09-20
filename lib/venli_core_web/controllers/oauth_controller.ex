@@ -36,6 +36,7 @@ defmodule VenliCoreWeb.OAuthController do
           same_site: "Lax",
           max_age: 7 * 24 * 60 * 60
         )
+        |> put_status(:ok)
         |> redirect(external: "#{frontend_url}/oauth/callback?token=#{token_pair.access}")
 
       {:error, changeset} ->
