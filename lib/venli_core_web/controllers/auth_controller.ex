@@ -24,12 +24,7 @@ defmodule VenliCoreWeb.AuthController do
 
         conn
         |> put_status(:created)
-        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
-          http_only: true,
-          secure: Mix.env() == :prod,
-          same_site: "Lax",
-          max_age: 7 * 24 * 60 * 60
-        )
+        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh, Cookies.refresh_cookie_opts())
         |> json(%{
           message: "user created successfully",
           access_token: token_pair.access
@@ -48,12 +43,7 @@ defmodule VenliCoreWeb.AuthController do
         token_pair = TokenGenerator.generate_token_pair(user)
 
         conn
-        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
-          http_only: true,
-          secure: Mix.env() == :prod,
-          same_site: "Lax",
-          max_age: 7 * 24 * 60 * 60
-        )
+        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh, Cookies.refresh_cookie_opts())
         |> put_status(:ok)
         |> json(%{
           message: "login successful",
@@ -99,11 +89,7 @@ defmodule VenliCoreWeb.AuthController do
 
   def logout(conn, _params) do
     conn
-    |> delete_resp_cookie(Cookies.refresh_cookie_key(),
-      http_only: true,
-      secure: Mix.env() == :prod,
-      same_site: "Lax"
-    )
+    |> delete_resp_cookie(Cookies.refresh_cookie_key(), Cookies.delete_refresh_cookie_opts())
     |> put_status(:ok)
     |> json(%{
       message: "logged out successfully"
