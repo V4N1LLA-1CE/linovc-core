@@ -52,6 +52,10 @@ config :venli_core, VenliCoreWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :venli_core, dev_routes: true
 
+# Configure frontend URL for dev
+config :venli_core,
+  frontend_url: "http://localhost:3000"
+
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 

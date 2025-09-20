@@ -19,6 +19,8 @@ defmodule VenliCoreWeb.OAuthController do
   end
 
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
+    frontend_url = Application.get_env(:venli_core, :frontend_url)
+
     case Accounts.create_or_link_oauth_user(auth) do
       {:ok, user} ->
         token_pair = TokenGenerator.generate_token_pair(user)
@@ -27,7 +29,6 @@ defmodule VenliCoreWeb.OAuthController do
         # return access token in json
         # store refresh token in httpscookie 7 days
         # redirect to frontend callback page with access token
-        frontend_url = System.get_env("FRONTEND_URL") || "http://localhost:3000"
 
         conn
         |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh,
@@ -39,10 +40,10 @@ defmodule VenliCoreWeb.OAuthController do
         |> put_status(:ok)
         |> redirect(external: "#{frontend_url}/oauth/callback?token=#{token_pair.access}")
 
-      {:error, changeset} ->
+      {:error, _changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> json(%{error: "Failed to create user", details: changeset})
+        |> redirect(external: "#{frontend_url}/oauth/callback")
     end
   end
 
