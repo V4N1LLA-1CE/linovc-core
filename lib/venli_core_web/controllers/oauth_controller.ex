@@ -37,22 +37,21 @@ defmodule VenliCoreWeb.OAuthController do
           same_site: "Lax",
           max_age: 7 * 24 * 60 * 60
         )
-        |> put_status(:ok)
+        |> put_status(302)
         |> redirect(external: "#{frontend_url}/oauth/callback?token=#{token_pair.access}")
 
       {:error, _changeset} ->
         conn
-        |> put_status(:unprocessable_entity)
+        |> put_status(302)
         |> redirect(external: "#{frontend_url}/oauth/callback")
     end
   end
 
   def callback(%{assigns: %{ueberauth_failure: failure}} = conn, _params) do
+    frontend_url = Application.get_env(:venli_core, :frontend_url)
+
     conn
-    |> put_status(:unauthorized)
-    |> json(%{
-      error: "OAuth authentication failed",
-      details: failure.errors
-    })
+    |> put_status(302)
+    |> redirect(external: "#{frontend_url}/oauth/callback")
   end
 end
