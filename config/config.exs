@@ -40,7 +40,7 @@ config :logger, :default_formatter,
 config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
-  base_path: "/api/auth",
+  base_path: "/api/oauth",
   providers: [
     google: {Ueberauth.Strategy.Google, [default_scope: "email profile"]}
   ]

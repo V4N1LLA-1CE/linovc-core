@@ -22,6 +22,7 @@ defmodule VenliCoreWeb.Router do
     plug VenliCoreWeb.Plugs.EnsureAccessToken
   end
 
+  # api routes
   scope "/api", VenliCoreWeb do
     pipe_through :api
 
@@ -30,17 +31,22 @@ defmodule VenliCoreWeb.Router do
     scope "/auth" do
       post "/register", AuthController, :register
       post "/login", AuthController, :login
-      get "/refresh", AuthController, :refresh
+      post "/refresh", AuthController, :refresh
       post "/logout", AuthController, :logout
     end
 
-    # OAuth routes with session support to store state
-    # between register and callbacks
-    scope "/auth" do
+    # OAuth routes 
+    scope "/oauth" do
       pipe_through :oauth
 
       get "/:provider", OAuthController, :request
       get "/:provider/callback", OAuthController, :callback
+    end
+
+    scope "/user" do
+      pipe_through :auth
+
+      get "/", UserController, :profile
     end
   end
 

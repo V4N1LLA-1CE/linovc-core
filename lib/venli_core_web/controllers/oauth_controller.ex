@@ -31,13 +31,17 @@ defmodule VenliCoreWeb.OAuthController do
         # redirect to frontend callback page with access token
 
         conn
-        |> put_resp_cookie(Cookies.refresh_cookie_key(), token_pair.refresh, Cookies.refresh_cookie_opts())
-        |> put_status(302)
+        |> put_resp_cookie(
+          Cookies.refresh_cookie_key(),
+          token_pair.refresh,
+          Cookies.refresh_cookie_opts()
+        )
+        |> put_status(:found)
         |> redirect(external: "#{frontend_url}/oauth/callback?token=#{token_pair.access}")
 
       {:error, _changeset} ->
         conn
-        |> put_status(302)
+        |> put_status(:found)
         |> redirect(external: "#{frontend_url}/oauth/callback")
     end
   end
@@ -46,7 +50,7 @@ defmodule VenliCoreWeb.OAuthController do
     frontend_url = Application.get_env(:venli_core, :frontend_url)
 
     conn
-    |> put_status(302)
+    |> put_status(:found)
     |> redirect(external: "#{frontend_url}/oauth/callback")
   end
 end
