@@ -1,4 +1,5 @@
 defmodule VenliCore.Accounts.User do
+  alias VenliCore.Accounts
   alias VenliCore.Auth.Permissions
   use Ecto.Schema
   import Ecto.Changeset
@@ -13,6 +14,8 @@ defmodule VenliCore.Accounts.User do
     field :bio, :string
     field :location, :string
     field :scopes, {:array, :string}
+    field :account_type, :string
+    field :pfp_url, :string
 
     timestamps(type: :utc_datetime)
   end
@@ -20,7 +23,17 @@ defmodule VenliCore.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :password, :name, :headline, :bio, :location, :scopes])
+    |> cast(attrs, [
+      :email,
+      :password,
+      :name,
+      :headline,
+      :bio,
+      :location,
+      :scopes,
+      :account_type,
+      :pfp_url
+    ])
     |> validate_required([:email, :password])
     |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must be a valid email")
     |> validate_length(:password, min: 8, message: "must be at least 8 characters")
@@ -28,6 +41,8 @@ defmodule VenliCore.Accounts.User do
     |> validate_length(:headline, max: 255, message: "cannot exceed 255 characters")
     |> validate_length(:bio, max: 1000, message: "cannot exceed 1000 characters")
     |> validate_length(:location, max: 255, message: "cannot exceed 255 characters")
+    |> validate_inclusion(:account_type, Accounts.valid_account_types())
+    |> validate_format(:pfp_url, ~r/^https?:\/\//, message: "must be a valid URL")
     |> validate_scopes()
     |> unique_constraint(:email)
     |> hash_password()

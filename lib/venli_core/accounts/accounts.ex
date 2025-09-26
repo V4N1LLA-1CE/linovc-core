@@ -10,6 +10,9 @@ defmodule VenliCore.Accounts do
 
   alias VenliCore.Accounts.User
 
+  @account_types ~w(investor founder talent)
+  def valid_account_types, do: @account_types
+
   @doc """
   Returns the list of users.
 
@@ -132,8 +135,7 @@ defmodule VenliCore.Accounts do
   Creates or updates a user from OAuth data with auto-linking by email.
   """
   def create_or_link_oauth_user(oauth_info) do
-    email = oauth_info.info.email
-    name = oauth_info.info.name
+    %{email: email, name: name, image: pfp_url} = oauth_info.info
 
     case get_user_by_email(email) do
       nil ->
@@ -142,19 +144,27 @@ defmodule VenliCore.Accounts do
           email: email,
           name: name,
           password: generate_random_password(),
-          scopes: [Permissions.default_scope()]
+          scopes: [Permissions.default_scope()],
+          pfp_url: pfp_url
         })
 
       existing_user ->
-        # auto-link: update name if not set
-        update_attrs = %{}
-
+        # auto-link: update fields if not set
         update_attrs =
-          if is_nil(existing_user.name) or existing_user.name == "" do
-            Map.put(update_attrs, :name, name)
-          else
-            update_attrs
-          end
+          [
+            {existing_user.name, :name, name},
+            {existing_user.pfp_url, :pfp_url, pfp_url}
+          ]
+          |> Enum.reduce(
+            %{},
+            fn {existing, key, new}, acc ->
+              if is_nil(existing) or existing == "" do
+                Map.put(acc, key, new)
+              else
+                acc
+              end
+            end
+          )
 
         update_user(existing_user, update_attrs)
     end
