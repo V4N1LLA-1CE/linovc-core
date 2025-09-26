@@ -47,6 +47,7 @@ defmodule VenliCoreWeb.Router do
       pipe_through :auth
 
       get "/", UserController, :profile
+      patch "/", UserController, :update_profile
     end
   end
 
