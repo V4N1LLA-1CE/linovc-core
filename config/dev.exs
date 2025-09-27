@@ -4,7 +4,8 @@ import Config
 config :venli_core, VenliCore.Repo,
   username: "root",
   password: "toor",
-  hostname: "localhost",
+  # DB_HOST for when running with docker
+  hostname: System.get_env("DB_HOST") || "localhost",
   database: "venli_db",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
@@ -17,9 +18,11 @@ config :venli_core, VenliCore.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 config :venli_core, VenliCoreWeb.Endpoint,
-  # Binding to loopback ipv4 address prevents access from other machines.
-  # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}, port: String.to_integer(System.get_env("PORT") || "4000")],
+  # loopback: 127.0.0.1 if running without docker, if running with docker, 0.0.0.0
+  http: [
+    ip: if(System.get_env("USING_DOCKER") == "true", do: {0, 0, 0, 0}, else: {127, 0, 0, 1}),
+    port: 4000
+  ],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
